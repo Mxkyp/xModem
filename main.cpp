@@ -1,6 +1,6 @@
 #include "instructions.hpp"
 #include <iostream>
-
+#include "Reader.h"
 int main(int argc, char *argv[]) {
   printf("\n[1] XModem");
   printf("\n[2] XModem(CRC)\n");
@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
     printf("\n[2] send\n");
     printf("\n[3] exit\n");
   }
+
+    Reader reader = new Reader();
 
   return 0;
 }
