@@ -15,7 +15,7 @@ void Receiver::initTransmission(){
 }
 
 bool Receiver::readPort() {
-    const int n = 128;
+    const int n = 132;
     char szBuff[n + 1] = {0};
     DWORD dwBytesRead = 0;
 

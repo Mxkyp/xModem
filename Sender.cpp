@@ -2,7 +2,7 @@
 #include "Sender.hpp"
 
 //init the portName and name of the file to send
-Sender::Sender(std::string portName, std::string fileName) : portName(portName), file(fileName, std::ios::in | std::ios::binary) {};
+Sender::Sender(std::string portName, std::string fileName) : Transmitter(portName, fileName, std::ios::in | std::ios::binary) {};
 
 //wait for either ACK or NAK
 unsigned char Sender::waitForSymbol() {

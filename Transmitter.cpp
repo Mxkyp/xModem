@@ -3,8 +3,8 @@
 //
 #include "Transmitter.hpp"
 
-Transmitter::Transmitter(std::string portName, std::string fileName)
-    : portName(portName), file(fileName, std::ios::out | std::ios::binary) {
+Transmitter::Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags)
+    : portName(portName), file(fileName, flags) {
     if (!file) {
         std::cerr << "Error opening file: " << fileName << std::endl;
     }
