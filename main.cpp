@@ -1,6 +1,6 @@
 #include "instructions.hpp"
 #include <iostream>
-#include "Reader.hpp"
+#include "Transmitter.hpp"
 int main(int argc, char *argv[]) {
     /*
   printf("\n[1] XModem");
@@ -19,13 +19,13 @@ int main(int argc, char *argv[]) {
   }
 
   if(received == '1'){
-      auto *reader = new Reader("COM1", "file.txt");
+      auto *reader = new Transmitter("COM1", "file.txt");
       reader->openPort();
       reader->transmit();
   }
 
   if(received == '2'){
-        auto *reader = new Reader("COM2", "file2.txt");
+        auto *reader = new Transmitter("COM2", "file2.txt");
         reader->openPort();
         reader->writePort();
   }

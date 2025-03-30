@@ -1,21 +1,21 @@
 //
 // Created by mikol on 03/29/25.
 //
-#include "Reader.hpp"
+#include "Transmitter.hpp"
 #include "instructions.hpp"
 #include <fstream>
 #include <future>
 #include <chrono>
 #include <thread>
 
-Reader::Reader(std::string portName, std::string fileName)
+Transmitter::Transmitter(std::string portName, std::string fileName)
     : portName(portName), file(fileName, std::ios::out | std::ios::binary) {
     if (!file) {
         std::cerr << "Error opening file: " << fileName << std::endl;
     }
 }
 
-void Reader::openPort(void) {
+void Transmitter::openPort(void) {
     hSerial = CreateFile(portName.c_str(),
                          GENERIC_READ | GENERIC_WRITE,
                          0,
@@ -33,7 +33,7 @@ void Reader::openPort(void) {
     setTimeOuts();
 }
 
- void Reader::setTransmissionParams(void) {
+ void Transmitter::setTransmissionParams(void) {
     dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
     if (!GetCommState(hSerial, &dcbSerialParams)) {
         //error getting state
@@ -47,7 +47,7 @@ void Reader::openPort(void) {
     }
 }
 
-void Reader::setTimeOuts(void){
+void Transmitter::setTimeOuts(void){
     timeouts.ReadIntervalTimeout=50;
     timeouts.ReadTotalTimeoutConstant=50;
     timeouts.ReadTotalTimeoutMultiplier=10;
@@ -58,13 +58,13 @@ void Reader::setTimeOuts(void){
     }
 }
 
-void Reader::transmit(){
+void Transmitter::transmit(){
    initTransmission();
 }
 
-void Reader::initTransmission(){
+void Transmitter::initTransmission(){
     for (int i = 0; i < 6; ++i) {
-        sendControlSign(NAK);
+        sendControlSymbol(NAK);
         std::this_thread::sleep_for(std::chrono::seconds(10));
         if(readPort()) {
             break;
@@ -72,10 +72,9 @@ void Reader::initTransmission(){
     }
 }
 
-void Reader::sendControlSign(int sign) {
-    char signByte = static_cast<char>(sign); // Convert int to char
+void Transmitter::sendControlSymbol(unsigned char Symbol) {
     DWORD dwBytesWritten = 0;
-    if (!WriteFile(hSerial, &signByte, 1, &dwBytesWritten, NULL)) {
+    if (!WriteFile(hSerial, &Symbol, 1, &dwBytesWritten, NULL)) {
         // Error occurred, report to the user
         DWORD dwError = GetLastError();
         std::cerr << "WriteFile failed with error " << dwError << std::endl;
@@ -83,15 +82,15 @@ void Reader::sendControlSign(int sign) {
     }
 }
 
-void Reader::waitForNak() {
-    int sign = readControlSigns();
+void Transmitter::waitForNak() {
+    int sign = readControlSymbol();
     while(sign != NAK) {
-        sign = readControlSigns();
+        sign = readControlSymbol();
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
-int Reader::readControlSigns() {
+int Transmitter::readControlSymbol() {
     unsigned char szBuff = -1;
     DWORD dwBytesRead = 0;
     if(!ReadFile(hSerial, &szBuff, 1, &dwBytesRead, NULL)){
@@ -100,7 +99,7 @@ int Reader::readControlSigns() {
     return static_cast<int>(szBuff);
 }
 
-bool Reader::readPort() {
+bool Transmitter::readPort() {
     const int n = 128;
     char szBuff[n + 1] = {0};
     DWORD dwBytesRead = 0;
@@ -122,7 +121,7 @@ bool Reader::readPort() {
     return true;
 }
 
-void Reader::writePort(void) {
+void Transmitter::writePort(void) {
     waitForNak();
     const int n = 128;
     char szBuff[n + 1] = {0};  // +1 to ensure there's space for the null terminator
@@ -142,11 +141,11 @@ void Reader::writePort(void) {
     std::cout << "Sent: " << szBuff << std::endl;
 }
 
-void Reader::closePort(void){
+void Transmitter::closePort(void){
     CloseHandle(hSerial);
 }
 
-Reader::~Reader() {
+Transmitter::~Transmitter() {
     file.close();
     CloseHandle(hSerial);
 }

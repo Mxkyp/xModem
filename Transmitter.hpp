@@ -2,13 +2,13 @@
 // Created by mikol on 03/29/25.
 //
 
-#ifndef XMODEM_READER_HPP
-#define XMODEM_READER_HPP
+#ifndef XMODEM_TRANSMITTER_HPP
+#define XMODEM_TRANSMITTER_HPP
 
 #include <Windows.h>
 #include <iostream>
 #include <fstream>
-class Reader{
+class Transmitter{
 
 private:
     HANDLE hSerial;
@@ -18,24 +18,24 @@ private:
     COMMTIMEOUTS timeouts = {0};
 
 public:
-    Reader(std::string portName, std::string fileName);
-    ~Reader();
+    //common
+    Transmitter(std::string portName, std::string fileName);
+    ~Transmitter();
     void openPort();
+    void closePort();
     void setTransmissionParams();
     void setTimeOuts();
-    bool readPort();
-    void writePort();
-    void closePort();
+    void sendControlSymbol(unsigned char Symbol);
+    int readControlSymbol();
 
+    // receiver
     void initTransmission();
+    bool readPort();
 
-    void sendControlSign(int sign);
-
-    int readControlSigns();
-
+    // sender
+    void writePort();
     void waitForNak();
-
     void transmit();
 };
 
-#endif //XMODEM_READER_HPP
+#endif //XMODEM_TRANSMITTER_HPP

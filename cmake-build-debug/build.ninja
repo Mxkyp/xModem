@@ -56,8 +56,8 @@ build CMakeFiles/xModem.dir/main.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug C
   OBJECT_DIR = CMakeFiles\xModem.dir
   OBJECT_FILE_DIR = CMakeFiles\xModem.dir
 
-build CMakeFiles/xModem.dir/Reader.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug C$:/Users/mikol/working/telekomunikacja/xModem/Reader.cpp || cmake_object_order_depends_target_xModem
-  DEP_FILE = CMakeFiles\xModem.dir\Reader.cpp.obj.d
+build CMakeFiles/xModem.dir/Transmitter.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug C$:/Users/mikol/working/telekomunikacja/xModem/Transmitter.cpp || cmake_object_order_depends_target_xModem
+  DEP_FILE = CMakeFiles\xModem.dir\Transmitter.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/mikol/working/telekomunikacja/xModem/.
   OBJECT_DIR = CMakeFiles\xModem.dir
@@ -71,7 +71,7 @@ build CMakeFiles/xModem.dir/Reader.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug
 #############################################
 # Link the executable xModem.exe
 
-build xModem.exe: CXX_EXECUTABLE_LINKER__xModem_Debug CMakeFiles/xModem.dir/main.cpp.obj CMakeFiles/xModem.dir/Reader.cpp.obj
+build xModem.exe: CXX_EXECUTABLE_LINKER__xModem_Debug CMakeFiles/xModem.dir/main.cpp.obj CMakeFiles/xModem.dir/Transmitter.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\xModem.dir

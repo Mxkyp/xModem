@@ -8,5 +8,5 @@ include_directories(.)
 add_executable(xModem
         instructions.hpp
         main.cpp
-        Reader.cpp
-        Reader.hpp)
+        Transmitter.cpp
+        Transmitter.hpp)
