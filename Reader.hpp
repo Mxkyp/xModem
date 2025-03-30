@@ -23,9 +23,19 @@ public:
     void openPort();
     void setTransmissionParams();
     void setTimeOuts();
-    void readPort();
+    bool readPort();
     void writePort();
     void closePort();
+
+    void initTransmission();
+
+    void sendControlSign(int sign);
+
+    int readControlSigns();
+
+    void waitForNak();
+
+    void transmit();
 };
 
 #endif //XMODEM_READER_HPP

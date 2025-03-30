@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
   if(received == '1'){
       auto *reader = new Reader("COM1", "file.txt");
       reader->openPort();
-      reader->readPort();
+      reader->transmit();
   }
 
   if(received == '2'){
