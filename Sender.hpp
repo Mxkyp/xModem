@@ -20,6 +20,8 @@ class Sender : public Transmitter {
     void sendPacket(char *packet, int n, DWORD bytesWritten);
 
     void prepare(char *packet);
+
+    void sendPacket(char *packet, DWORD bytesWritten);
 };
 
 

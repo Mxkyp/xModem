@@ -12,6 +12,8 @@ public:
     ~Receiver();
     void initTransmission();
     bool readPort();
+    int calculateChecksum(char *message);
+    void getFrom(char* packet, char* message);
 };
 
 

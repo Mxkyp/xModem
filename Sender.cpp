@@ -19,19 +19,14 @@ void Sender::writePort() {
     int n = 0;
     DWORD dwBytesWritten = 0;
 
-    if (mode == CHECKSUM) {
-        n = 132;
-    } else if (mode == CRC) {
-        n = 133;
-    }
-
-    char *packet = new char[n];
+    char *packet = new char[packetByteSize];
 
     prepare(packet);
     std::cout << packet << std::endl;
     if (waitForSymbol() == NAK) {
-        sendPacket(packet, n, dwBytesWritten);
+        sendPacket(packet, dwBytesWritten);
     }
+
 }
 
 void Sender::prepare(char *packet) {
@@ -42,9 +37,17 @@ void Sender::prepare(char *packet) {
     packet[1] = this->counter++ % 0xFF;
     packet[2] = 0xFF - this->counter;
 
-    for(int i = 0; file.get(c) && i < 128; i++) {
+    int i;
+
+    for(i = 0; file.get(c) && i < 128; i++) {
         message[i] = c;
         sum += c;
+    }
+    if(i < 128){
+        while(i < 128){
+            message[i] = '\0';
+            i++;
+        }
     }
 
     std::cout << message << std::endl;
@@ -53,8 +56,9 @@ void Sender::prepare(char *packet) {
     packet[packetByteSize -1] = sum % 0xFF;
     std::cout << sum % 0xFF << std::endl;
 }
-void Sender::sendPacket(char *packet,int n, DWORD bytesWritten) {
-    if (!WriteFile(hSerial, packet, n, &bytesWritten, NULL)) {
+
+void Sender::sendPacket(char *packet, DWORD bytesWritten) {
+    if (!WriteFile(hSerial, packet, packetByteSize, &bytesWritten, NULL)) {
         // Error occurred, report to the user
         DWORD dwError = GetLastError();
         std::cerr << "WriteFile failed with error " << dwError << std::endl;
