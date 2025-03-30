@@ -8,12 +8,16 @@
 #include <Windows.h>
 #include <iostream>
 class Reader{
+
 private:
     HANDLE hSerial;
+    std::string portName;
     DCB dcbSerialParams = {0};
     COMMTIMEOUTS timeouts = {0};
 
-    void openPort(std::string portName);
+public:
+    explicit Reader(std::string portName);
+    void openPort(void);
     void setTransmissionParams(void);
     void setTimeOuts(void);
     void readPort(void);

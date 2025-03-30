@@ -1,0 +1,3 @@
+C:/Users/mikol/working/telekomunikacja/xModem/cmake-build-debug/CMakeFiles/xModem.dir
+C:/Users/mikol/working/telekomunikacja/xModem/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/mikol/working/telekomunikacja/xModem/cmake-build-debug/CMakeFiles/rebuild_cache.dir
