@@ -4,7 +4,6 @@
 #include "Transmitter.hpp"
 #include "instructions.hpp"
 #include <fstream>
-#include <future>
 #include <chrono>
 #include <thread>
 
@@ -58,17 +57,15 @@ void Transmitter::setTimeOuts(void){
     }
 }
 
-void Transmitter::transmit(){
-   initTransmission();
-}
-
 void Transmitter::initTransmission(){
     for (int i = 0; i < 6; ++i) {
         sendControlSymbol(NAK);
+        std::cout << "Sending NAK (init transmission)";
         std::this_thread::sleep_for(std::chrono::seconds(10));
         if(readPort()) {
             break;
         }
+        std::cout << "no response";
     }
 }
 
@@ -82,36 +79,18 @@ void Transmitter::sendControlSymbol(unsigned char Symbol) {
     }
 }
 
-void Transmitter::waitForNak() {
-    int sign = readControlSymbol();
-    while(sign != NAK) {
-        sign = readControlSymbol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    }
-}
-
-int Transmitter::readControlSymbol() {
-    unsigned char szBuff = -1;
-    DWORD dwBytesRead = 0;
-    if(!ReadFile(hSerial, &szBuff, 1, &dwBytesRead, NULL)){
-        //error occurred. Report to user.
-    }
-    return static_cast<int>(szBuff);
-}
 
 bool Transmitter::readPort() {
     const int n = 128;
     char szBuff[n + 1] = {0};
     DWORD dwBytesRead = 0;
     if(!ReadFile(hSerial, szBuff, n, &dwBytesRead, NULL)){
-        //error occurred. Report to user.
+       //error occurred. Report to user.
     }
 
-    if(dwBytesRead == 0) {
+    if(dwBytesRead == 0 || szBuff[0] == EOT) {
         return false;
     }
-
-    szBuff[dwBytesRead] = '\0';
 
     file.write(szBuff, dwBytesRead);
     file.flush();
@@ -121,8 +100,28 @@ bool Transmitter::readPort() {
     return true;
 }
 
-void Transmitter::writePort(void) {
-    waitForNak();
+
+
+unsigned char Transmitter::waitForSymbol() {
+    unsigned char sign = readControlSymbol();
+    while(sign != NAK && sign != ACK) {
+        sign = readControlSymbol();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+    return sign;
+}
+
+unsigned char Transmitter::readControlSymbol() {
+    unsigned char szBuff = -1;
+    DWORD dwBytesRead = 0;
+    if(!ReadFile(hSerial, &szBuff, 1, &dwBytesRead, NULL)){
+        //error occurred. Report to user.
+    }
+    return szBuff;
+}
+
+void Transmitter::writePort() {
+    waitForSymbol();
     const int n = 128;
     char szBuff[n + 1] = {0};  // +1 to ensure there's space for the null terminator
     DWORD dwBytesWritten = 0;

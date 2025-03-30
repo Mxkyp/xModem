@@ -2,11 +2,6 @@
 #include <iostream>
 #include "Transmitter.hpp"
 int main(int argc, char *argv[]) {
-    /*
-  printf("\n[1] XModem");
-  printf("\n[2] XModem(CRC)\n");
-  printf("\n[3] exit\n");
-     */
 
     char received;
 

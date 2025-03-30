@@ -26,7 +26,7 @@ public:
     void setTransmissionParams();
     void setTimeOuts();
     void sendControlSymbol(unsigned char Symbol);
-    int readControlSymbol();
+    unsigned char readControlSymbol();
 
     // receiver
     void initTransmission();
@@ -34,7 +34,7 @@ public:
 
     // sender
     void writePort();
-    void waitForNak();
+    unsigned char waitForSymbol();
     void transmit();
 };
 
