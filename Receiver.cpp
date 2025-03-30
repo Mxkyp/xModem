@@ -17,13 +17,18 @@ void Receiver::initTransmission(){
 bool Receiver::readPort() {
     char* szBuff = new char[packetByteSize];
     DWORD dwBytesRead = 0;
-
+    int sum = 0;
     if (!ReadFile(hSerial, szBuff, packetByteSize, &dwBytesRead, NULL)) {
         //error occurred. Report to user.
     }
+
     char message[128] = {0};
     if(szBuff[0] == SOH) {
         memcpy(message, szBuff+3, 128);
+        for(char i : message){
+           sum += i;
+        }
+        std::cout << sum % 0xFF << std::endl;
     }
 
 
@@ -31,6 +36,4 @@ bool Receiver::readPort() {
 
     file.write(message, 128);
     file.flush();
-
-    // Print the received data
 }

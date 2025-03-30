@@ -51,6 +51,7 @@ void Sender::prepare(char *packet) {
     memcpy(packet + 3, message, 128);
 
     packet[packetByteSize -1] = sum % 0xFF;
+    std::cout << sum % 0xFF << std::endl;
 }
 void Sender::sendPacket(char *packet,int n, DWORD bytesWritten) {
     if (!WriteFile(hSerial, packet, n, &bytesWritten, NULL)) {
