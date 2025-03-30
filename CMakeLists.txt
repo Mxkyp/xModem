@@ -9,4 +9,8 @@ add_executable(xModem
         instructions.hpp
         main.cpp
         Transmitter.cpp
-        Transmitter.hpp)
+        Transmitter.hpp
+        Receiver.cpp
+        Receiver.hpp
+        Sender.cpp
+        Sender.hpp)

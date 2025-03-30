@@ -2,10 +2,6 @@
 // Created by mikol on 03/29/25.
 //
 #include "Transmitter.hpp"
-#include "instructions.hpp"
-#include <fstream>
-#include <chrono>
-#include <thread>
 
 Transmitter::Transmitter(std::string portName, std::string fileName)
     : portName(portName), file(fileName, std::ios::out | std::ios::binary) {
@@ -57,17 +53,6 @@ void Transmitter::setTimeOuts(void){
     }
 }
 
-void Transmitter::initTransmission(){
-    for (int i = 0; i < 6; ++i) {
-        sendControlSymbol(NAK);
-        std::cout << "Sending NAK (init transmission)";
-        std::this_thread::sleep_for(std::chrono::seconds(10));
-        if(readPort()) {
-            break;
-        }
-        std::cout << "no response";
-    }
-}
 
 void Transmitter::sendControlSymbol(unsigned char Symbol) {
     DWORD dwBytesWritten = 0;
@@ -80,36 +65,7 @@ void Transmitter::sendControlSymbol(unsigned char Symbol) {
 }
 
 
-bool Transmitter::readPort() {
-    const int n = 128;
-    char szBuff[n + 1] = {0};
-    DWORD dwBytesRead = 0;
-    if(!ReadFile(hSerial, szBuff, n, &dwBytesRead, NULL)){
-       //error occurred. Report to user.
-    }
 
-    if(dwBytesRead == 0 || szBuff[0] == EOT) {
-        return false;
-    }
-
-    file.write(szBuff, dwBytesRead);
-    file.flush();
-
-    // Print the received data
-    std::cout << "Received: " << szBuff << std::endl;
-    return true;
-}
-
-
-
-unsigned char Transmitter::waitForSymbol() {
-    unsigned char sign = readControlSymbol();
-    while(sign != NAK && sign != ACK) {
-        sign = readControlSymbol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    }
-    return sign;
-}
 
 unsigned char Transmitter::readControlSymbol() {
     unsigned char szBuff = -1;
@@ -120,25 +76,6 @@ unsigned char Transmitter::readControlSymbol() {
     return szBuff;
 }
 
-void Transmitter::writePort() {
-    waitForSymbol();
-    const int n = 128;
-    char szBuff[n + 1] = {0};  // +1 to ensure there's space for the null terminator
-    DWORD dwBytesWritten = 0;
-
-    // Populate the buffer with your data to be sent
-    // For now, you might want to test sending something simple like "Hello"
-    strncpy(szBuff, "Hello1", n);
-
-    if (!WriteFile(hSerial, szBuff, strlen(szBuff), &dwBytesWritten, NULL)) {
-        // Error occurred, report to the user
-        DWORD dwError = GetLastError();
-        std::cerr << "WriteFile failed with error " << dwError << std::endl;
-        return;
-    }
-
-    std::cout << "Sent: " << szBuff << std::endl;
-}
 
 void Transmitter::closePort(void){
     CloseHandle(hSerial);

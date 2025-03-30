@@ -63,6 +63,20 @@ build CMakeFiles/xModem.dir/Transmitter.cpp.obj: CXX_COMPILER__xModem_unscanned_
   OBJECT_DIR = CMakeFiles\xModem.dir
   OBJECT_FILE_DIR = CMakeFiles\xModem.dir
 
+build CMakeFiles/xModem.dir/Receiver.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug C$:/Users/mikol/working/telekomunikacja/xModem/Receiver.cpp || cmake_object_order_depends_target_xModem
+  DEP_FILE = CMakeFiles\xModem.dir\Receiver.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/mikol/working/telekomunikacja/xModem/.
+  OBJECT_DIR = CMakeFiles\xModem.dir
+  OBJECT_FILE_DIR = CMakeFiles\xModem.dir
+
+build CMakeFiles/xModem.dir/Sender.cpp.obj: CXX_COMPILER__xModem_unscanned_Debug C$:/Users/mikol/working/telekomunikacja/xModem/Sender.cpp || cmake_object_order_depends_target_xModem
+  DEP_FILE = CMakeFiles\xModem.dir\Sender.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/mikol/working/telekomunikacja/xModem/.
+  OBJECT_DIR = CMakeFiles\xModem.dir
+  OBJECT_FILE_DIR = CMakeFiles\xModem.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target xModem
@@ -71,7 +85,7 @@ build CMakeFiles/xModem.dir/Transmitter.cpp.obj: CXX_COMPILER__xModem_unscanned_
 #############################################
 # Link the executable xModem.exe
 
-build xModem.exe: CXX_EXECUTABLE_LINKER__xModem_Debug CMakeFiles/xModem.dir/main.cpp.obj CMakeFiles/xModem.dir/Transmitter.cpp.obj
+build xModem.exe: CXX_EXECUTABLE_LINKER__xModem_Debug CMakeFiles/xModem.dir/main.cpp.obj CMakeFiles/xModem.dir/Transmitter.cpp.obj CMakeFiles/xModem.dir/Receiver.cpp.obj CMakeFiles/xModem.dir/Sender.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\xModem.dir

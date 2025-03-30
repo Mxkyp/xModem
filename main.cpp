@@ -1,6 +1,9 @@
 #include "instructions.hpp"
 #include <iostream>
 #include "Transmitter.hpp"
+#include "Receiver.hpp"
+#include "Sender.hpp"
+
 int main(int argc, char *argv[]) {
 
     char received;
@@ -14,15 +17,15 @@ int main(int argc, char *argv[]) {
   }
 
   if(received == '1'){
-      auto *reader = new Transmitter("COM1", "file.txt");
+      auto *reader = new Receiver("COM1", "file.txt");
       reader->openPort();
-      reader->transmit();
+      reader->initTransmission();
   }
 
   if(received == '2'){
-        auto *reader = new Transmitter("COM2", "file2.txt");
-        reader->openPort();
-        reader->writePort();
+        auto *sender = new Sender("COM2", "file2.txt");
+        sender->openPort();
+        sender->writePort();
   }
 
   return 0;
