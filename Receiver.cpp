@@ -19,18 +19,14 @@ bool Receiver::readPort() {
     char szBuff[n + 1] = {0};
     DWORD dwBytesRead = 0;
 
-    while(dwBytesRead != 0 && szBuff[0] != EOT) {
-        if (!ReadFile(hSerial, szBuff, n, &dwBytesRead, NULL)) {
-            //error occurred. Report to user.
-        }
-        sendControlSymbol(ACK);
-
-
-        file.write(szBuff, dwBytesRead);
-        file.flush();
+    if (!ReadFile(hSerial, szBuff, n, &dwBytesRead, NULL)) {
+        //error occurred. Report to user.
     }
 
-    // Print the received data
     std::cout << "Received: " << szBuff << std::endl;
-    return true;
+
+    file.write(szBuff, dwBytesRead);
+    file.flush();
+
+    // Print the received data
 }

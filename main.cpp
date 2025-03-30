@@ -20,7 +20,6 @@ int main(int argc, char *argv[]) {
       auto *reader = new Receiver("COM1", "file.txt");
       reader->openPort();
       reader->initTransmission();
-      reader->readPort();
   }
 
   if(received == '2'){
