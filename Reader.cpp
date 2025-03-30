@@ -1,10 +1,15 @@
 //
 // Created by mikol on 03/29/25.
 //
-#include "Reader.h"
+#include "Reader.hpp"
+#include "instructions.hpp"
+#include <fstream>
 
-    Reader::Reader(std::string portName) {
-        this->portName = portName;
+    Reader::Reader(std::string portName, std::string fileName)
+        : portName(portName), file(fileName, std::ios::out | std::ios::binary) {
+    if (!file) {
+        std::cerr << "Error opening file: " << fileName << std::endl;
+    }
     }
 
     void Reader::openPort(void) {
@@ -59,6 +64,9 @@
 
         szBuff[dwBytesRead] = '\0';
 
+        file.write(szBuff, dwBytesRead);
+        file.flush();
+
         // Print the received data
         std::cout << "Received: " << szBuff << std::endl;
     }
@@ -85,3 +93,8 @@
     void Reader::closePort(void){
         CloseHandle(hSerial);
     }
+
+Reader::~Reader() {
+    file.close();
+    CloseHandle(hSerial);
+}

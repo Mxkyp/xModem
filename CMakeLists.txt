@@ -9,4 +9,4 @@ add_executable(xModem
         instructions.hpp
         main.cpp
         Reader.cpp
-        Reader.h)
+        Reader.hpp)

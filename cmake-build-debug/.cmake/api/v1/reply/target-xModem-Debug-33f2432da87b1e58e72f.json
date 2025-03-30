@@ -138,7 +138,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "Reader.h",
+			"path" : "Reader.hpp",
 			"sourceGroupIndex" : 0
 		}
 	],
