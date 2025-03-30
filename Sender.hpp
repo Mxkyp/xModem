@@ -7,8 +7,7 @@
 #include "Transmitter.hpp"
 
 class Sender : public Transmitter {
-    unsigned char counter;
-    uint16_t crc;
+    unsigned char counter = 0x01;
     char *szBuff;
 
     public:
@@ -19,6 +18,8 @@ class Sender : public Transmitter {
     void transmit();
 
     void sendPacket(char *packet, int n, DWORD bytesWritten);
+
+    void prepare(char *packet);
 };
 
 

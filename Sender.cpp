@@ -25,12 +25,32 @@ void Sender::writePort() {
         n = 133;
     }
 
-    char *szBuff = new char[n];
-    file.read(szBuff, n);
-    std::cout << szBuff << std::endl;
+    char *packet = new char[n];
+
+    prepare(packet);
+    std::cout << packet << std::endl;
     if (waitForSymbol() == NAK) {
-        sendPacket(szBuff, n, dwBytesWritten);
+        sendPacket(packet, n, dwBytesWritten);
     }
+}
+
+void Sender::prepare(char *packet) {
+    int sum = 0;
+    char c;
+    char message[128] = {0};
+    packet[0] = SOH;
+    packet[1] = this->counter++ % 0xFF;
+    packet[2] = 0xFF - this->counter;
+
+    for(int i = 0; file.get(c) && i < 128; i++) {
+        message[i] = c;
+        sum += c;
+    }
+
+    std::cout << message << std::endl;
+    memcpy(packet + 3, message, 128);
+
+    packet[packetByteSize -1] = sum % 0xFF;
 }
 void Sender::sendPacket(char *packet,int n, DWORD bytesWritten) {
     if (!WriteFile(hSerial, packet, n, &bytesWritten, NULL)) {

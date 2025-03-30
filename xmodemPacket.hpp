@@ -2,10 +2,10 @@
 
 class xmodemPacket {
 private:
-  uint8_t SOH;
-  uint8_t PacketNr;
-  uint8_t data[128];
-  uint8_t PacketNrFill;
+  unsigned char SOH = SOH;
+  unsigned char PacketNr;
+  unsigned char data[128];
+  unsigned char PacketNrFill;
 };
 
 class xmodemPacketCRC : xmodemPacket {

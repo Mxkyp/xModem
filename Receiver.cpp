@@ -15,17 +15,21 @@ void Receiver::initTransmission(){
 }
 
 bool Receiver::readPort() {
-    const int n = 132;
-    char szBuff[n + 1] = {0};
+    char* szBuff = new char[packetByteSize];
     DWORD dwBytesRead = 0;
 
-    if (!ReadFile(hSerial, szBuff, n, &dwBytesRead, NULL)) {
+    if (!ReadFile(hSerial, szBuff, packetByteSize, &dwBytesRead, NULL)) {
         //error occurred. Report to user.
     }
+    char message[128] = {0};
+    if(szBuff[0] == SOH) {
+        memcpy(message, szBuff+3, 128);
+    }
 
-    std::cout << "Received: " << szBuff << std::endl;
 
-    file.write(szBuff, dwBytesRead);
+    std::cout << "Received: " << message << std::endl;
+
+    file.write(message, 128);
     file.flush();
 
     // Print the received data
