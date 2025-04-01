@@ -2,6 +2,7 @@
 
 Receiver::Receiver(std::string portName, std::string fileName) : Transmitter(portName, fileName) {};
 
+// send NAK every ten seconds for 1 minute if you get a response read it
 void Receiver::initTransmission(){
     for (int i = 0; i < 6; ++i) {
         sendControlSymbol(NAK);
@@ -19,11 +20,13 @@ bool Receiver::readPort() {
     DWORD dwBytesRead = 0;
     int messageLength = 0;
     int sum = 0;
+
     if (!ReadFile(hSerial, packet, packetByteSize, &dwBytesRead, NULL)) {
         //error occurred. Report to user.
     }
 
     char message[128] = {0};
+
     if(packet[0] == SOH) {
         getFrom(packet, message);
         for(char i : message) {
@@ -35,12 +38,11 @@ bool Receiver::readPort() {
         }
         if(calculateChecksum(message) == packet[packetByteSize - 1]) {
             sendControlSymbol(ACK);
+        } else {
+            sendControlSymbol(NAK);
         }
     }
 
-
-    std::cout << "Received: " << messageLength << std::endl;
-    std::cout << "Received: " << packet << std::endl;
     std::cout << sum % 0xFF << std::endl;
     file.write(message, messageLength);
     file.flush();
