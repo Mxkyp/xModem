@@ -14,7 +14,7 @@ class Sender : public Transmitter {
     Sender(std::string portName, std::string fileName);
     ~Sender();
     void writePort();
-    unsigned char waitForSymbol();
+    unsigned char waitForResponse();
     void transmit();
 
     void sendPacket(char *packet, int n, DWORD bytesWritten);
@@ -24,6 +24,8 @@ class Sender : public Transmitter {
     void sendPacket(char *packet, DWORD bytesWritten);
 
     int setMessageGetSum(char *message, int *sum);
+
+    unsigned char waitFor(unsigned char symbol);
 };
 
 

@@ -8,9 +8,10 @@ void Receiver::initTransmission(){
         sendControlSymbol(NAK);
         std::cout << "Sending NAK (init transmission)";
         std::this_thread::sleep_for(std::chrono::seconds(10));
-        if(readPort()) {
-            break;
+        while(readPort()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(90));
         }
+        break;
         std::cout << "no response";
     }
 }
@@ -37,7 +38,9 @@ bool Receiver::readPort() {
         }
         if(calculateChecksum(message) == packet[packetByteSize - 1]) {
             sendControlSymbol(ACK);
+            std::cout << "checksum good";
         } else {
+            std::cout << "in packet" << packet[packetByteSize - 1]<< std::endl;
             sendControlSymbol(NAK);
         }
     }
@@ -45,7 +48,6 @@ bool Receiver::readPort() {
         return false;
     }
 
-    std::cout << sum % 0xFF << std::endl;
     file.write(message, messageLength);
     file.flush();
     return true;
@@ -65,5 +67,6 @@ int Receiver::calculateChecksum(char* message) {
         sum += message[i];
     }
 
+    std::cout << sum % 0xFF << std::endl;
     return sum % 0xFF;
 }
