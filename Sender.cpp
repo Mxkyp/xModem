@@ -31,30 +31,35 @@ void Sender::writePort() {
 
 void Sender::prepare(char *packet) {
     int sum = 0;
-    char c;
     char message[128] = {0};
     packet[0] = SOH;
     packet[1] = this->counter++ % 0xFF;
     packet[2] = 0xFF - this->counter;
 
-    int i;
-
-    for(i = 0; file.get(c) && i < 128; i++) {
-        message[i] = c;
-        sum += c;
-    }
-    if(i < 128){
-        while(i < 128){
-            message[i] = '\0';
-            i++;
-        }
-    }
+    setMessageGetSum(message, &sum);
 
     std::cout << message << std::endl;
     memcpy(packet + 3, message, 128);
 
     packet[packetByteSize -1] = sum % 0xFF;
     std::cout << sum % 0xFF << std::endl;
+}
+
+int Sender::setMessageGetSum(char* message, int* sum) {
+    char c;
+    int messLength;
+    for(messLength = 0; file.get(c) && messLength < 128; messLength++) {
+        message[messLength] = c;
+        (*sum) += c;
+    }
+    if(messLength > 0 && messLength < 128){
+        while(messLength < 128){
+            message[messLength] = '\0';
+            messLength++;
+        }
+    }
+
+    return messLength;
 }
 
 void Sender::sendPacket(char *packet, DWORD bytesWritten) {

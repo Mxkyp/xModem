@@ -26,7 +26,6 @@ bool Receiver::readPort() {
     }
 
     char message[128] = {0};
-
     if(packet[0] == SOH) {
         getFrom(packet, message);
         for(char i : message) {
@@ -42,10 +41,14 @@ bool Receiver::readPort() {
             sendControlSymbol(NAK);
         }
     }
+    else if (packet[0] == EOT) {
+        return false;
+    }
 
     std::cout << sum % 0xFF << std::endl;
     file.write(message, messageLength);
     file.flush();
+    return true;
 }
 
 void Receiver::getFrom(char* packet, char* message) {

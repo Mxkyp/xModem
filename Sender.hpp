@@ -22,6 +22,8 @@ class Sender : public Transmitter {
     void prepare(char *packet);
 
     void sendPacket(char *packet, DWORD bytesWritten);
+
+    int setMessageGetSum(char *message, int *sum);
 };
 
 
