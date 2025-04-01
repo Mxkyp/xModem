@@ -42,6 +42,8 @@ bool Receiver::readPort() {
         }
         if(calculateChecksum(message) == packet[packetByteSize - 1]) {
             sendControlSymbol(ACK);
+            file.write(reinterpret_cast<const char *>(message), messageLength);
+            file.flush();
         } else {
             std::cout << "in packet" << packet[packetByteSize - 1]<< std::endl;
             sendControlSymbol(NAK);
@@ -51,8 +53,6 @@ bool Receiver::readPort() {
         return false;
     }
 
-    file.write(reinterpret_cast<const char *>(message), messageLength);
-    file.flush();
     return true;
 }
 
