@@ -1,5 +1,5 @@
 #include "Receiver.hpp"
-
+#include <vector>
 //Receiver::Receiver(std::string portName, std::string fileName) : Transmitter(portName, fileName, std::ios::out | std::ios::binary) {};
 
 Receiver::Receiver(std::string portName, std::string fileName) {
@@ -22,6 +22,7 @@ void Receiver::initTransmission(){
 
 bool Receiver::readPort() {
     auto* packet = new unsigned char[packetByteSize];
+    //std::vector<unsigned char> packet(128);
     DWORD dwBytesRead = 0;
     int messageLength = 0;
     int sum = 0;
@@ -34,9 +35,6 @@ bool Receiver::readPort() {
     if(packet[0] == SOH) {
         getFrom(packet, message);
         for(unsigned char i : message) {
-            if(i == 0x00) {
-                break;
-            }
            sum += i;
            messageLength++;
         }
