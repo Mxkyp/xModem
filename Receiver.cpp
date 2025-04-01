@@ -1,7 +1,11 @@
 #include "Receiver.hpp"
 
-Receiver::Receiver(std::string portName, std::string fileName) : Transmitter(portName, fileName) {};
+//Receiver::Receiver(std::string portName, std::string fileName) : Transmitter(portName, fileName, std::ios::out | std::ios::binary) {};
 
+Receiver::Receiver(std::string portName, std::string fileName) {
+    this->portName = portName;
+    this->file.open(fileName, std::ios_base::out | std::ios_base::binary);
+};
 // send NAK every ten seconds for 1 minute if you get a response read it
 void Receiver::initTransmission(){
     for (int i = 0; i < 6; ++i) {

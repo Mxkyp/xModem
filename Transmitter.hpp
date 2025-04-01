@@ -27,7 +27,7 @@ protected:
     int packetByteSize = 132;
 
 public:
-    Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags = std::ios::out | std::ios::binary);
+    //Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags = std::ios::out | std::ios::binary);
     ~Transmitter();
     void openPort();
     void closePort();

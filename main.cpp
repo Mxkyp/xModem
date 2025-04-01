@@ -15,15 +15,16 @@ int main(int argc, char *argv[]) {
   while (received != '1' && received != '2' && received != '3') {
     std::cin.get(received);
   }
-
+    //a.pdf
+    //b.pdf
   if(received == '1'){
-      auto *reader = new Receiver("COM1", "file.txt");
+      auto *reader = new Receiver("COM1", "b.pdf");
       reader->openPort();
       reader->initTransmission();
   }
 
   if(received == '2'){
-        auto *sender = new Sender("COM2", "file2.txt");
+        auto *sender = new Sender("COM2", "a.pdf");
         sender->openPort();
         sender->writePort();
   }
