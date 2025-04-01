@@ -16,7 +16,7 @@ unsigned char Sender::waitForResponse() {
     unsigned char sign = readControlSymbol();
     while(sign != NAK && sign != ACK) {
         sign = readControlSymbol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     return sign;
 }
@@ -25,7 +25,7 @@ unsigned char Sender::waitFor(unsigned char symbol) {
     unsigned char sign = readControlSymbol();
     while(sign != symbol) {
         sign = readControlSymbol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 

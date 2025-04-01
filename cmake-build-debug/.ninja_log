@@ -49,3 +49,7 @@
 16	2795	7652322090527876	CMakeFiles/xModem.dir/Sender.cpp.obj	b6e0904ef4dc4ba8
 9	2892	7652322090455801	CMakeFiles/xModem.dir/Receiver.cpp.obj	9d09b3bcc69b3466
 2893	3088	7652322119290414	xModem.exe	6c5fd27e0d2e7a33
+9	2673	7652326696837714	CMakeFiles/xModem.dir/Sender.cpp.obj	b6e0904ef4dc4ba8
+2674	2865	7652326723480065	xModem.exe	6c5fd27e0d2e7a33
+9	2621	7652328475779942	CMakeFiles/xModem.dir/main.cpp.obj	c850bcbcc39ab121
+2622	2796	7652328501913179	xModem.exe	6c5fd27e0d2e7a33

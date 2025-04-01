@@ -17,13 +17,13 @@ int main(int argc, char *argv[]) {
   }
 
   if(received == '1'){
-      auto *reader = new Receiver("COM1", "b.png");
+      auto *reader = new Receiver("COM1", "b.pdf");
       reader->openPort();
       reader->initTransmission();
   }
 
   if(received == '2'){
-        auto *sender = new Sender("COM2", "a.png");
+        auto *sender = new Sender("COM2", "a.pdf");
         sender->openPort();
         sender->writePort();
   }
