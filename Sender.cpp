@@ -27,7 +27,7 @@ void Sender::writePort() {
     int n = 0;
     DWORD dwBytesWritten = 0;
 
-    char *packet = new char[packetByteSize];
+    auto *packet = new unsigned char[packetByteSize];
 
     prepare(packet);
     waitForResponse();
@@ -43,9 +43,9 @@ void Sender::writePort() {
     }
 }
 
-void Sender::prepare(char *packet) {
+void Sender::prepare(unsigned char *packet) {
     int sum = 0;
-    char message[128] = {0};
+    unsigned char message[128] = {0};
     packet[0] = SOH;
     packet[1] = this->counter++ % 0xFF;
     packet[2] = 0xFF - this->counter;
@@ -56,20 +56,20 @@ void Sender::prepare(char *packet) {
     }
     memcpy(packet + 3, message, 128);
 
-    packet[packetByteSize -1] = sum % 0xFF; //set checksum byte
-    std::cout << sum % 0xFF << std::endl;
+    packet[packetByteSize -1] = static_cast<unsigned char>(sum % 0x100); //set checksum byte
+    std::cout << sum % 0x100 << std::endl;
 }
 
-int Sender::setMessageGetSum(char* message, int* sum) {
-    char c;
-    int messLength;
-    for(messLength = 0; file.get(c) && messLength < 128; messLength++) {
-        message[messLength] = c;
-        (*sum) += c;
+int Sender::setMessageGetSum(unsigned char* message, int* sum) {
+    int byte = 0;
+    int messLength = 0;
+    while (messLength < 128 && (byte = file.get()) != EOF) {
+        message[messLength++] = static_cast<unsigned char>(byte);
+        (*sum) += byte;
     }
     if(messLength > 0 && messLength < 128){
         while(messLength < 128){
-            message[messLength] = '\0';
+            message[messLength] = 0x00;
             messLength++;
         }
     }
@@ -77,7 +77,7 @@ int Sender::setMessageGetSum(char* message, int* sum) {
     return messLength;
 }
 
-void Sender::sendPacket(char *packet, DWORD bytesWritten) {
+void Sender::sendPacket(unsigned char *packet, DWORD bytesWritten) {
     if (!WriteFile(hSerial, packet, packetByteSize, &bytesWritten, NULL)) {
         // Error occurred, report to the user
         DWORD dwError = GetLastError();

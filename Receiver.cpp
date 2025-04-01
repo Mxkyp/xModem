@@ -17,7 +17,7 @@ void Receiver::initTransmission(){
 }
 
 bool Receiver::readPort() {
-    char* packet = new char[packetByteSize];
+    auto* packet = new unsigned char[packetByteSize];
     DWORD dwBytesRead = 0;
     int messageLength = 0;
     int sum = 0;
@@ -26,11 +26,11 @@ bool Receiver::readPort() {
         //error occurred. Report to user.
     }
 
-    char message[128] = {0};
+    unsigned char message[128] = {0};
     if(packet[0] == SOH) {
         getFrom(packet, message);
-        for(char i : message) {
-            if(i == '\0') {
+        for(unsigned char i : message) {
+            if(i == 0x00) {
                 break;
             }
            sum += i;
@@ -38,7 +38,6 @@ bool Receiver::readPort() {
         }
         if(calculateChecksum(message) == packet[packetByteSize - 1]) {
             sendControlSymbol(ACK);
-            std::cout << "checksum good";
         } else {
             std::cout << "in packet" << packet[packetByteSize - 1]<< std::endl;
             sendControlSymbol(NAK);
@@ -48,25 +47,25 @@ bool Receiver::readPort() {
         return false;
     }
 
-    file.write(message, messageLength);
+    file.write(reinterpret_cast<const char *>(message), messageLength);
     file.flush();
     return true;
 }
 
-void Receiver::getFrom(char* packet, char* message) {
+void Receiver::getFrom(unsigned char* packet, unsigned char* message) {
     const int startIndex = 3;
     for (int i = 0; i < 128; i++) {
        message[i] = packet[i + startIndex];
     }
 }
 
-int Receiver::calculateChecksum(char* message) {
+unsigned char Receiver::calculateChecksum(unsigned char* message) {
     int sum = 0;
 
     for(int i = 0; i < 128; i++) {
         sum += message[i];
     }
 
-    std::cout << sum % 0xFF << std::endl;
-    return sum % 0xFF;
+    std::cout << sum % 0x100 << std::endl;
+    return static_cast<unsigned char>(sum % 0x100);
 }

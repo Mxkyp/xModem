@@ -26,6 +26,12 @@ class Sender : public Transmitter {
     int setMessageGetSum(char *message, int *sum);
 
     unsigned char waitFor(unsigned char symbol);
+
+    int setMessageGetSum(unsigned char *message, int *sum);
+
+    void sendPacket(unsigned char *packet, DWORD bytesWritten);
+
+    void prepare(unsigned char *packet);
 };
 
 
