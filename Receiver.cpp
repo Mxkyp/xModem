@@ -13,7 +13,7 @@ void Receiver::initTransmission(){
         std::cout << "Sending NAK (init transmission)";
         std::this_thread::sleep_for(std::chrono::seconds(10));
         while(readPort()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(90));
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
         break;
         std::cout << "no response";

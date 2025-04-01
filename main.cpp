@@ -15,8 +15,7 @@ int main(int argc, char *argv[]) {
   while (received != '1' && received != '2' && received != '3') {
     std::cin.get(received);
   }
-    //a.pdf
-    //b.pdf
+
   if(received == '1'){
       auto *reader = new Receiver("COM1", "b.png");
       reader->openPort();
