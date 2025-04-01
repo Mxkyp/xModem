@@ -5,6 +5,7 @@
 
 Transmitter::Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags)
     : portName(portName), file(fileName, flags) {
+    std::cout << "flags " << fileName << std::endl;
     if (!file) {
         std::cerr << "Error opening file: " << fileName << std::endl;
     }
