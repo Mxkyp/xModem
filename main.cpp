@@ -1,6 +1,5 @@
 #include "instructions.hpp"
 #include <iostream>
-#include "Transmitter.hpp"
 #include "Receiver.hpp"
 #include "Sender.hpp"
 

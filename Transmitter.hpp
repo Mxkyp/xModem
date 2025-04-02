@@ -35,6 +35,10 @@ public:
     void setTimeOuts();
     void sendControlSymbol(unsigned char Symbol);
     unsigned char readControlSymbol();
+
+    int calcrc(char *ptr, int count);
+
+    uint16_t calcrc(unsigned char *ptr, uint16_t count);
 };
 
 #endif //XMODEM_TRANSMITTER_HPP
