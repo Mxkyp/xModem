@@ -50,6 +50,7 @@ void Receiver::initTransmission(){
         }
     }
     else if (packet[0] == EOT) {
+        sendControlSymbol(ACK);
         return EOT;
     } else if(messageLength == 0){
         return NAK;
