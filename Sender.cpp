@@ -36,17 +36,14 @@ void Sender::writePort() {
 
     prepare(packet);
     waitForResponse();
-    printf("I' m sending!\n");
     sendPacket(packet, dwBytesWritten);
 
     while(packet[0] != EOT){
         unsigned char response = waitForResponse();
         if(response == ACK) {
             prepare(packet);
-            printf("I' m preparing !\n");
         }
         sendPacket(packet, dwBytesWritten);
-        printf("I' m sending again!\n");
     }
 }
 
@@ -54,8 +51,9 @@ void Sender::prepare(unsigned char *packet) {
     int sum = 0;
     unsigned char message[128] = {0};
     packet[0] = SOH;
-    packet[1] = this->counter++ % 0xFF;
-    packet[2] = 0xFF - this->counter;
+    packet[1] = this->counter % 0x100;
+    packet[2] = 0xFF - packet[1];
+    this->counter++;
 
     int messLength = setMessageGetSum(message, &sum);
     if(messLength == 0) {
