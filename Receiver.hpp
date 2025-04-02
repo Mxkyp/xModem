@@ -11,7 +11,7 @@ public:
     Receiver(std::string portName, std::string fileName);
     ~Receiver();
     void initTransmission();
-    bool readPort();
+    unsigned char readPort();
     void getFrom(unsigned char *packet, unsigned char *message);
     unsigned char calculateChecksum(unsigned char *message);
 

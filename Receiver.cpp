@@ -15,13 +15,18 @@ void Receiver::initTransmission(){
         }
         std::cout << "Sending NAK (init transmission)";
         std::this_thread::sleep_for(std::chrono::seconds(10));
-        while(readPort()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+        unsigned char gotResponse;
+        do {
+            gotResponse = readPort();
+        } while(gotResponse == ACK);
+        if(gotResponse == EOT) {
+            break;
         }
     }
 }
 
-bool Receiver::readPort() {
+ unsigned char Receiver::readPort() {
     auto* packet = new unsigned char[packetByteSize];
     DWORD dwBytesRead = 0;
     int messageLength = 0;
@@ -45,10 +50,12 @@ bool Receiver::readPort() {
         }
     }
     else if (packet[0] == EOT) {
-        return false;
+        return EOT;
+    } else if(messageLength == 0){
+        return NAK;
     }
 
-    return true;
+    return ACK;
 }
 
 void Receiver::processCS(unsigned char* packet, unsigned char* message, int messageLength) {
