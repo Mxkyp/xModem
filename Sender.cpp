@@ -16,7 +16,6 @@ unsigned char Sender::waitForResponse() {
     unsigned char sign = readControlSymbol();
     while(sign != NAK && sign != ACK) {
         sign = readControlSymbol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     return sign;
 }
@@ -37,15 +36,17 @@ void Sender::writePort() {
 
     prepare(packet);
     waitForResponse();
+    printf("I' m sending!\n");
     sendPacket(packet, dwBytesWritten);
 
     while(packet[0] != EOT){
         unsigned char response = waitForResponse();
         if(response == ACK) {
             prepare(packet);
+            printf("I' m preparing !\n");
         }
         sendPacket(packet, dwBytesWritten);
-        //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        printf("I' m sending again!\n");
     }
 }
 

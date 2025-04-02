@@ -74,6 +74,7 @@ unsigned char Transmitter::readControlSymbol() {
     if(!ReadFile(hSerial, &szBuff, 1, &dwBytesRead, NULL)){
         //error occurred. Report to user.
     }
+    printf("%c, %d , %d\n", szBuff, szBuff == NAK, szBuff == ACK);
     return szBuff;
 }
 
