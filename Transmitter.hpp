@@ -24,13 +24,11 @@ protected:
     DCB dcbSerialParams = {0};
     COMMTIMEOUTS timeouts = {0};
     boolean mode = CHECKSUM;
-    int packetByteSize = 132;
+    int packetByteSize = 133;
 
 public:
-    //Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags = std::ios::out | std::ios::binary);
     ~Transmitter();
     void openPort();
-    void closePort();
     void setTransmissionParams();
     void setTimeOuts();
     void sendControlSymbol(unsigned char Symbol);

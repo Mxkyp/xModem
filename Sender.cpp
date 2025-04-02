@@ -8,7 +8,7 @@ Sender::Sender(std::string portName, std::string fileName) {
 //wait for either ACK or NAK
 unsigned char Sender::waitForResponse() {
     unsigned char sign = readControlSymbol();
-    while(sign != NAK && sign != ACK) {
+    while(sign != NAK && sign != ACK && sign != 'C') {
         sign = readControlSymbol();
     }
     return sign;
@@ -48,12 +48,12 @@ void Sender::prepare(unsigned char *packet) {
     packet[1] = this->counter % 0x100;
     packet[2] = 0xFF - packet[1];
     this->counter++;
-
     int messLength = setMessageGetSum(message, &sum);
     if(packetByteSize == 132) {
         packet[packetByteSize -1] = static_cast<unsigned char>(sum % 0x100); //set checksum byte
     } else if (packetByteSize == 133) {
         uint16_t crc = calcrc(message, 128);
+        printf("Iget here wuhu");
         packet[packetByteSize - 2] = static_cast<unsigned char> (crc / 256);
         packet[packetByteSize - 1] = static_cast<unsigned char> (crc % 256);
     }

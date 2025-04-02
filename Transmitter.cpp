@@ -68,12 +68,12 @@ unsigned char Transmitter::readControlSymbol() {
 
 uint16_t Transmitter::calcrc(unsigned char *ptr, uint16_t count)
 {
-    uint16_t  crc;
+    uint16_t crc;
     unsigned char i;
     crc = 0;
-    while (--count >= 0)
+    while (count--)
     {
-        crc = crc ^ (int) *ptr++ << 8;
+        crc ^= (uint16_t)(*ptr++) << 8;
         i = 8;
         do
         {
@@ -84,11 +84,6 @@ uint16_t Transmitter::calcrc(unsigned char *ptr, uint16_t count)
         } while(--i);
     }
     return (crc);
-}
-
-
-void Transmitter::closePort(void){
-    CloseHandle(hSerial);
 }
 
 Transmitter::~Transmitter() {

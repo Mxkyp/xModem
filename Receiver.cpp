@@ -34,17 +34,33 @@ bool Receiver::readPort() {
     unsigned char message[128] = {0};
     if(packet[0] == SOH) {
         getFrom(packet, message);
-        for(unsigned char i : message) {
-           sum += i;
-           messageLength++;
+        for (unsigned char i: message) {
+            sum += i;
+            messageLength++;
         }
-        if(calculateChecksum(message) == packet[packetByteSize - 1]) {
-            sendControlSymbol(ACK);
-            file.write(reinterpret_cast<const char *>(message), messageLength);
-            file.flush();
-        } else {
-            std::cout << "in packet" << packet[packetByteSize - 1]<< std::endl;
-            sendControlSymbol(NAK);
+        if(packetByteSize == 132) {
+            if (calculateChecksum(message) == packet[packetByteSize - 1]) {
+                sendControlSymbol(ACK);
+                file.write(reinterpret_cast<const char *>(message), messageLength);
+                file.flush();
+            } else {
+                std::cout << "in packet" << packet[packetByteSize - 1] << std::endl;
+                sendControlSymbol(NAK);
+            }
+        } else if (packetByteSize == 133) {
+            uint16_t crc = calcrc(message, 128);
+            unsigned char msb = packet[packetByteSize - 2];
+            unsigned char lsb = packet[packetByteSize - 1];
+            uint16_t crcFromPacket =  msb * 256 + lsb;
+            if (crc == crcFromPacket) {
+                sendControlSymbol(ACK);
+                file.write(reinterpret_cast<const char *>(message), messageLength);
+                file.flush();
+            } else {
+                std::cout << "in packet" << crcFromPacket << std::endl;
+                std::cout << "actual" << crc << std::endl;
+                sendControlSymbol(NAK);
+            }
         }
     }
     else if (packet[0] == EOT) {
