@@ -39,28 +39,9 @@ bool Receiver::readPort() {
             messageLength++;
         }
         if(packetByteSize == 132) {
-            if (calculateChecksum(message) == packet[packetByteSize - 1]) {
-                sendControlSymbol(ACK);
-                file.write(reinterpret_cast<const char *>(message), messageLength);
-                file.flush();
-            } else {
-                std::cout << "in packet" << packet[packetByteSize - 1] << std::endl;
-                sendControlSymbol(NAK);
-            }
+            processCS(packet, message, messageLength);
         } else if (packetByteSize == 133) {
-            uint16_t crc = calcrc(message, 128);
-            unsigned char msb = packet[packetByteSize - 2];
-            unsigned char lsb = packet[packetByteSize - 1];
-            uint16_t crcFromPacket =  msb * 256 + lsb;
-            if (crc == crcFromPacket) {
-                sendControlSymbol(ACK);
-                file.write(reinterpret_cast<const char *>(message), messageLength);
-                file.flush();
-            } else {
-                std::cout << "in packet" << crcFromPacket << std::endl;
-                std::cout << "actual" << crc << std::endl;
-                sendControlSymbol(NAK);
-            }
+            processCRC(packet, message, messageLength);
         }
     }
     else if (packet[0] == EOT) {
@@ -69,6 +50,35 @@ bool Receiver::readPort() {
 
     return true;
 }
+
+void Receiver::processCS(unsigned char* packet, unsigned char* message, int messageLength) {
+    if (calculateChecksum(message) == packet[packetByteSize - 1]) {
+        sendControlSymbol(ACK);
+        file.write(reinterpret_cast<const char *>(message), messageLength);
+        file.flush();
+    } else {
+        std::cout << "in packet" << packet[packetByteSize - 1] << std::endl;
+        sendControlSymbol(NAK);
+    }
+}
+
+void Receiver::processCRC(unsigned char* packet, unsigned char* message, int messageLength) {
+    uint16_t crc = calcrc(message, 128);
+    unsigned char msb = packet[packetByteSize - 2];
+    unsigned char lsb = packet[packetByteSize - 1];
+    uint16_t crcFromPacket =  msb * 256 + lsb;
+    if (crc == crcFromPacket) {
+        sendControlSymbol(ACK);
+        file.write(reinterpret_cast<const char *>(message), messageLength);
+        file.flush();
+    } else {
+        std::cout << "in packet" << crcFromPacket << std::endl;
+        std::cout << "actual" << crc << std::endl;
+        sendControlSymbol(NAK);
+    }
+}
+
+
 
 void Receiver::getFrom(unsigned char* packet, unsigned char* message) {
     const int startIndex = 3;

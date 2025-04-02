@@ -14,6 +14,12 @@ public:
     bool readPort();
     void getFrom(unsigned char *packet, unsigned char *message);
     unsigned char calculateChecksum(unsigned char *message);
+
+    void processMessageCS(unsigned char *packet, unsigned char *message);
+
+    void processCS(unsigned char *packet, unsigned char *message, int messageLength);
+
+    void processCRC(unsigned char *packet, unsigned char *message, int messageLength);
 };
 
 

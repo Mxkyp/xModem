@@ -32,6 +32,8 @@ class Sender : public Transmitter {
     void sendPacket(unsigned char *packet, DWORD bytesWritten);
 
     void prepare(unsigned char *packet);
+
+    void setCRC(unsigned char *packet, unsigned char *message);
 };
 
 

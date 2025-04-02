@@ -39,6 +39,8 @@ void Sender::writePort() {
         }
         sendPacket(packet, dwBytesWritten);
     }
+
+    sendPacket(packet, dwBytesWritten);
 }
 
 void Sender::prepare(unsigned char *packet) {
@@ -52,10 +54,7 @@ void Sender::prepare(unsigned char *packet) {
     if(packetByteSize == 132) {
         packet[packetByteSize -1] = static_cast<unsigned char>(sum % 0x100); //set checksum byte
     } else if (packetByteSize == 133) {
-        uint16_t crc = calcrc(message, 128);
-        printf("Iget here wuhu");
-        packet[packetByteSize - 2] = static_cast<unsigned char> (crc / 256);
-        packet[packetByteSize - 1] = static_cast<unsigned char> (crc % 256);
+        setCRC(packet, message);
     }
     if(messLength == 0) {
         packet[0] = EOT; // if read nothing, mark end of transmission
@@ -63,6 +62,12 @@ void Sender::prepare(unsigned char *packet) {
     memcpy(packet + 3, message, 128);
 
     std::cout << sum % 0x100 << std::endl;
+}
+
+void Sender::setCRC(unsigned char *packet, unsigned char *message) {
+    uint16_t crc = calcrc(message, 128);
+    packet[packetByteSize - 2] = static_cast<unsigned char> (crc / 256);
+    packet[packetByteSize - 1] = static_cast<unsigned char> (crc % 256);
 }
 
 int Sender::setMessageGetSum(unsigned char* message, int* sum) {
