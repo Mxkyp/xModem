@@ -50,12 +50,18 @@ void Sender::prepare(unsigned char *packet) {
     this->counter++;
 
     int messLength = setMessageGetSum(message, &sum);
+    if(packetByteSize == 132) {
+        packet[packetByteSize -1] = static_cast<unsigned char>(sum % 0x100); //set checksum byte
+    } else if (packetByteSize == 133) {
+        uint16_t crc = calcrc(message, 128);
+        packet[packetByteSize - 2] = static_cast<unsigned char> (crc / 256);
+        packet[packetByteSize - 1] = static_cast<unsigned char> (crc % 256);
+    }
     if(messLength == 0) {
         packet[0] = EOT; // if read nothing, mark end of transmission
     }
     memcpy(packet + 3, message, 128);
 
-    packet[packetByteSize -1] = static_cast<unsigned char>(sum % 0x100); //set checksum byte
     std::cout << sum % 0x100 << std::endl;
 }
 

@@ -2,14 +2,6 @@
 // Created by mikol on 03/29/25.
 //
 #include "Transmitter.hpp"
-/*
-Transmitter::Transmitter(std::string portName, std::string fileName, std::ios_base::openmode flags)
-    : portName(portName), file(fileName, flags) {
-    if (!file) {
-        std::cerr << "Error opening file: " << fileName << std::endl;
-    }
-}
- */
 
 void Transmitter::openPort(void) {
     hSerial = CreateFile(portName.c_str(),
@@ -65,16 +57,12 @@ void Transmitter::sendControlSymbol(unsigned char Symbol) {
     }
 }
 
-
-
-
 unsigned char Transmitter::readControlSymbol() {
     unsigned char szBuff = -1;
     DWORD dwBytesRead = 0;
     if(!ReadFile(hSerial, &szBuff, 1, &dwBytesRead, NULL)){
         //error occurred. Report to user.
     }
-    printf("%c, %d , %d\n", szBuff, szBuff == NAK, szBuff == ACK);
     return szBuff;
 }
 
